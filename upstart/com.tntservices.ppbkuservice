@@ -1,7 +1,36 @@
+description "Backup Utility Service"
+
 start on started java-serviceboot
- 
+
+#console output
+
 script
-	/usr/bin/luna-helper 'luna://com.palm.vm/launch' '{"serviceName":"com.tntservices.ppbkuservice","className":"com.tntservices.ppbkuservice.PPBkuService"}'
-	sleep 10
-	/usr/bin/luna-send -n 1 palm://com.tntservices.ppbkuservice/version {}
+   logger "com.tntservices.ppbkuservice upstart: script called"
+
+   sleep 10
+   logger "com.tntservices.ppbkuservice upstart: delay done"
+
+   returnTrue=0
+   tries=0
+   while [ $returnTrue -eq 0 -a $tries -le 20 ]
+   do
+      returnVal=$(luna-send -n 1 luna://com.tntservices.ppbkuservice/status '{}' 2>&1)
+
+      logger "com.tntservices.ppbkuservice upstart: returnVal is $returnVal"
+
+      tries=`expr $tries + 1`
+      if [ "$returnVal" = "** Message: serviceResponse Handling: 2, {\"returnValue\":true}" ]
+      then
+         returnTrue=1
+      else
+         sleep 10
+      fi
+   done
+
+   logger "com.tntservices.ppbkuservice upstart: $returnTrue"
+   logger "com.tntservices.ppbkuservice upstart: $tries"
+
+   logger "com.tntservices.ppbkuservice upstart: done"
 end script
+
+#respawn
