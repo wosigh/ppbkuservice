@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=com.tntservices.ppbkuservice
+Exec=/usr/bin/luna-helper 'luna://com.palm.vm/launch' '{"serviceName":"com.tntservices.ppbkuservice","className":"com.tntservices.ppbkuservice.PPBkuService"}'

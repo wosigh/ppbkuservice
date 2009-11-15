@@ -1,0 +1,8 @@
+#!/bin/sh
+# By Drew Phillibert 11/13/2009
+# drew.phillibert@gmail.com
+# TNT Services, Inc.
+
+rm -rf /tmp/Exclude
+echo -e $1 > /tmp/Include
+echo "Successfully built list!"

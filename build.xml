@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com.tntservices.ppbkuservice" default="jar" basedir=".">
+	<target name="clean">
+		<delete file="com.tntservices.ppbkuservice.jar"/>
+	</target>
+	<target name="build">
+		<javac 
+			classpath="serviceframework.jar:lunaservice.jar:json.jar:Utils.jar"
+			srcdir="."
+			destdir="."
+		/>
+ 	</target>
+	<target name="jar" depends="build">
+		<jar
+			destfile="com.tntservices.ppbkuservice.jar"
+			basedir="."
+			includes="**/*.class"
+		/>
+    </target>
+	<target name="upload" depends="jar">
+		 <exec executable="scp">
+		    <arg value="com.tntservices.ppbkuservice.jar"/>
+		    <arg value="root@webos:/usr/lib/luna/java/"/>
+		  </exec>
+		 <exec executable="ssh">
+		    <arg value="root@webos"/>
+		    <arg value="stop java-serviceboot"/>
+		  </exec>
+		 <exec executable="ssh">
+		    <arg value="root@webos"/>
+		    <arg value="start java-serviceboot"/>
+		  </exec>
+	</target>
+</project>

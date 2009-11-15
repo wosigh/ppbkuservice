@@ -1,0 +1,30 @@
+#!/bin/sh
+# By Drew Phillibert 11-01-2009
+# drew.phillibert@gmail.com
+# TNT Services, Inc.
+
+# Remove any old backup
+if [ -f /media/internal/ppbackup/ppbkusvc.tar.gz ]; then
+	rm -rf /media/internal/ppbackup >/null
+fi
+
+# Ensure that GNU Tar is available for use
+if [ ! -f /opt/bin/tar ]; then
+	echo -e "\nAn error occured installing TAR. Palm Pre Backup cannot continue!"
+	exit 1
+fi
+
+# Create the backup target directory
+mkdir -p /media/internal/ppbackup
+
+# Perform the backup operation
+/opt/bin/tar -czvf /media/internal/ppbackup/ppbku.tar.gz --files-from=/tmp/Include --exclude-from=/tmp/Exclude > /null
+
+# Check whether the backup completed successfully
+if [ -f /media/internal/ppbackup/ppbkusvc.tar.gz ]; then
+	echo -e "\nThe Palm Pre Backup completed successfully!"
+else
+	echo -e "\nThe Palm Pre Backup was not successful. Check your disk space, and try again."
+fi
+
+exit 0
