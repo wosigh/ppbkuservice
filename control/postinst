@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Install the java dbus service
+rm -f /usr/lib/luna/java/com.tntservices.ppbkuservice.jar
+ln -s /var/usr/lib/luna/java/com.tntservices.ppbkuservice.jar /usr/lib/luna/java/com.tntservices.ppbkuservice.jar
+rm -f /usr/share/dbus-1/system-services/com.tntservices.ppbkuservice.service
+ln -s /var/usr/share/dbus-1/system-services/com.tntservices.ppbkuservice.service /usr/share/dbus-1/system-services/com.tntservices.ppbkuservice.service
+
+# Install the upstart script
+rm -f /etc/event.d/com.tntservices.ppbkuservice
+cp /var/etc/event.d/com.tntservices.ppbkuservice /etc/event.d/com.tntservices.ppbkuservice
+
+# Restart the service handler (this also starts this service)
+if [ -z "$IPKG_OFFLINE_ROOT" ]; then # Defined by recent installers that also support flags.
+    /sbin/stop java-serviceboot
+    /sbin/start java-serviceboot
+fi
+
+exit 0
