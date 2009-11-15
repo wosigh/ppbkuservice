@@ -176,12 +176,9 @@ public class PPBkuService extends LunaServiceThread {
     @LunaServiceThread.PublicMethod
 	public void status(ServiceMessage msg)
 	throws JSONException, LSException {
-	if (ipkgReady) {
-	    JSONObject reply = new JSONObject();
-	    reply.put("returnValue",true);
-	    msg.respond(reply.toString());
-	} else
-	    ipkgDirNotReady(msg);
+	JSONObject reply = new JSONObject();
+	reply.put("returnValue",true);
+	msg.respond(reply.toString());
     }
 
 }
