@@ -1,0 +1,15 @@
+#!/bin/sh
+# By Drew Phillibert 11-01-2009
+# drew.phillibert@gmail.com
+# TNT Services, Inc.
+
+mount -o remount,rw / > /null
+if [ -f /media/internal/ppbackup/ppbku.tar.gz ]; then
+	cd /
+	/opt/bin/tar -xvzf /media/internal/ppbackup/ppbku.tar.gz > /tmp/restore_log
+	echo "The restore completed successfully."
+	exit 0
+fi
+echo "The archive is missing. Cannot continue. The restore failed."
+
+rm -rf /null

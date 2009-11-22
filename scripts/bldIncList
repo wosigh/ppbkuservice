@@ -3,6 +3,8 @@
 # drew.phillibert@gmail.com
 # TNT Services, Inc.
 
-rm -rf /tmp/Exclude
+mount -o remount,rw /  > /tmp/null
+rm -rf /tmp/Exclude  > /tmp/null
 echo -e $1 > /tmp/Include
 echo "Successfully built list!"
+rm -rf  /tmp/null

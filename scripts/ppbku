@@ -3,28 +3,28 @@
 # drew.phillibert@gmail.com
 # TNT Services, Inc.
 
-# Remove any old backup
+mount -o remount,rw / > /null
 if [ -f /media/internal/ppbackup/ppbkusvc.tar.gz ]; then
 	rm -rf /media/internal/ppbackup >/null
 fi
 
-# Ensure that GNU Tar is available for use
 if [ ! -f /opt/bin/tar ]; then
-	echo -e "\nAn error occured installing TAR. Palm Pre Backup cannot continue!"
-	exit 1
+		ipkg-opt install tar > /null
+	if [ ! -f /opt/bin/tar ]; then
+		echo -e "\nAn error occured installing TAR. Palm Pre Backup cannot continue!"
+		exit 1
+	fi
+	mkdir /media/internal/ppbackup > /null
+	/opt/bin/tar -czvf /media/internal/ppbackup/ppbku.tar.gz --files-from=/tmp/Include --exclude-from=/tmp/Exclude > /null
+else
+	mkdir /media/internal/ppbackup > /null
+	/opt/bin/tar -czvf /media/internal/ppbackup/ppbku.tar.gz --files-from=/tmp/Include --exclude-from=/tmp/Exclude > /null
 fi
 
-# Create the backup target directory
-mkdir -p /media/internal/ppbackup
-
-# Perform the backup operation
-/opt/bin/tar -czvf /media/internal/ppbackup/ppbku.tar.gz --files-from=/tmp/Include --exclude-from=/tmp/Exclude > /null
-
-# Check whether the backup completed successfully
 if [ -f /media/internal/ppbackup/ppbkusvc.tar.gz ]; then
 	echo -e "\nThe Palm Pre Backup completed successfully!"
 else
 	echo -e "\nThe Palm Pre Backup was not successful. Check your disk space, and try again."
 fi
 
-exit 0
+rm -rf /null
