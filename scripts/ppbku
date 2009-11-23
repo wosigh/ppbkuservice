@@ -4,27 +4,24 @@
 # TNT Services, Inc.
 
 mount -o remount,rw / > /null
-if [ -f /media/internal/ppbackup/ppbkusvc.tar.gz ]; then
-	rm -rf /media/internal/ppbackup >/null
-fi
 
 if [ ! -f /opt/bin/tar ]; then
-		ipkg-opt install tar > /null
-	if [ ! -f /opt/bin/tar ]; then
-		echo -e "\nAn error occured installing TAR. Palm Pre Backup cannot continue!"
-		exit 1
-	fi
-	mkdir /media/internal/ppbackup > /null
-	/opt/bin/tar -czvf /media/internal/ppbackup/ppbku.tar.gz --files-from=/tmp/Include --exclude-from=/tmp/Exclude > /null
-else
-	mkdir /media/internal/ppbackup > /null
-	/opt/bin/tar -czvf /media/internal/ppbackup/ppbku.tar.gz --files-from=/tmp/Include --exclude-from=/tmp/Exclude > /null
+	echo -e "\nAn error occured with GNU TAR. Palm Pre Backup cannot continue!"
+	exit 1
 fi
 
-if [ -f /media/internal/ppbackup/ppbkusvc.tar.gz ]; then
+if [ ! -d /media/internal/ppbackup ]; then
+	mkdir /media/internal/ppbackup > /null
+fi
+
+/opt/bin/tar -cvf /media/internal/ppbackup/ppbku_$1.tar.gz --files-from=/tmp/Include --exclude-from=/tmp/Exclude > /tmp/backup_log
+
+if [ -f /media/internal/ppbackup/ppbku_$1.tar.gz ]; then
 	echo -e "\nThe Palm Pre Backup completed successfully!"
 else
 	echo -e "\nThe Palm Pre Backup was not successful. Check your disk space, and try again."
+	exit 1
 fi
 
 rm -rf /null
+exit 0

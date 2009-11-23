@@ -4,12 +4,12 @@
 # TNT Services, Inc.
 
 mount -o remount,rw / > /null
-if [ -f /media/internal/ppbackup/ppbku.tar.gz ]; then
+if [ -f /media/internal/ppbackup/ppbku_$1.tar.gz ]; then
 	cd /
-	/opt/bin/tar -xvzf /media/internal/ppbackup/ppbku.tar.gz > /tmp/restore_log
-	echo "The restore completed successfully."
+	/opt/bin/tar -xvf /media/internal/ppbackup/ppbku_$1.tar.gz  > /tmp/restore_log
+	echo "SUCCESS: ppbku_$1.tar.gz, was successfuly restored."
 	exit 0
 fi
-echo "The archive is missing. Cannot continue. The restore failed."
-
+echo "ERROR: The archive is missing. Cannot continue. The restore failed."
 rm -rf /null
+exit 1

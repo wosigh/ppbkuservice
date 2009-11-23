@@ -19,7 +19,7 @@ import org.json.JSONObject;
 
 public class PPBkuService extends LunaServiceThread {
     private String name = "Palm Pre Backup Utility";
-    private String version = "0.1.1117";
+    private String version = "0.1.1116";
 
 
 	public static boolean isLegalString( String parameter )
@@ -45,18 +45,34 @@ public class PPBkuService extends LunaServiceThread {
 	{ 
 		try
 		{
-			Process p = Runtime.getRuntime().exec("/opt/bin/ppbku"); 
-			BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			String line = null; 
-			String output = ""; 
-			while ((line = input.readLine()) != null) { 
-			output = output + line; 
-			} 
-			input.close(); 
-			JSONObject reply = new JSONObject(); 
-			reply.put("output", output); 
-			msg.respond(reply.toString());
-			p.waitFor();
+			if (msg.getJSONPayload().has("param")) 
+			{
+				String prog = "/opt/bin/ppbku";
+				String param = msg.getJSONPayload().getString("param");
+				if (isLegalString(param))
+				{
+					Process p = Runtime.getRuntime().exec(prog + " " + param); 
+					BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+					String line = null; 
+					String output = ""; 
+					while ((line = input.readLine()) != null) { 
+					output = output + line; 
+					} 
+					input.close(); 
+					JSONObject reply = new JSONObject(); 
+					reply.put("output", output); 
+					msg.respond(reply.toString());
+					p.waitFor();
+				}
+				else 
+				{
+					msg.respondError(ErrorMessage.ERROR_CODE_INVALID_PARAMETER, "Invalid value for 'param' parameter");
+				}
+			}
+			else 
+			{
+			    msg.respondError(ErrorMessage.ERROR_CODE_INVALID_PARAMETER, "Missing 'param' parameter");
+			}
 		}
 		catch (LSException e) 
 		{
@@ -68,25 +84,80 @@ public class PPBkuService extends LunaServiceThread {
 	{ 
 		try
 		{
-			Process p = Runtime.getRuntime().exec("/opt/bin/pprstr"); 
-			BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			String line = null; 
-			String output = ""; 
-			while ((line = input.readLine()) != null) { 
-			output = output + line; 
-			} 
-			input.close(); 
-			JSONObject reply = new JSONObject(); 
-			reply.put("output", output); 
-			msg.respond(reply.toString());
-			p.waitFor();
+			if (msg.getJSONPayload().has("param")) 
+			{
+				String prog = "/opt/bin/pprstr";
+				String param = msg.getJSONPayload().getString("param");
+				if (isLegalString(param))
+				{
+					Process p = Runtime.getRuntime().exec(prog + " " + param); 
+					BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+					String line = null; 
+					String output = ""; 
+					while ((line = input.readLine()) != null) { 
+					output = output + line; 
+					} 
+					input.close(); 
+					JSONObject reply = new JSONObject(); 
+					reply.put("output", output); 
+					msg.respond(reply.toString());
+					p.waitFor();
+				}
+				else 
+				{
+					msg.respondError(ErrorMessage.ERROR_CODE_INVALID_PARAMETER, "Invalid value for 'param' parameter");
+				}
+			}
+			else 
+			{
+			    msg.respondError(ErrorMessage.ERROR_CODE_INVALID_PARAMETER, "Missing 'param' parameter");
+			}
 		}
 		catch (LSException e) 
 		{
 			this.logger.severe("", e);
 		}
 	}
-
+	@LunaServiceThread.PublicMethod
+	public void rmArchive(ServiceMessage msg) throws InterruptedException, JSONException, LSException, IOException 
+	{
+		try
+		{
+			if (msg.getJSONPayload().has("param")) 
+			{
+				String prog = "rm -rf /media/internal/ppbackup/ppbku_";
+				String param = msg.getJSONPayload().getString("param");
+				if (isLegalString(param))
+				{
+					Process p = Runtime.getRuntime().exec(prog +  param + ".tar.gz");
+					BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream())); 
+					String line = null; 
+					String output = ""; 
+					while ((line = input.readLine()) != null) 
+					{
+						output = output + line; 
+					}
+					input.close(); 
+					JSONObject reply = new JSONObject(); 
+					reply.put("output", output);
+					msg.respond(reply.toString());
+					p.waitFor();
+				}
+				else 
+				{
+					msg.respondError(ErrorMessage.ERROR_CODE_INVALID_PARAMETER, "Invalid value for 'param' parameter");
+				}
+			}
+			else 
+			{
+			    msg.respondError(ErrorMessage.ERROR_CODE_INVALID_PARAMETER, "Missing 'param' parameter");
+			}
+		} 
+		catch (LSException e) 
+		{
+			this.logger.severe("", e);
+		}
+	}
 	@LunaServiceThread.PublicMethod
 	public void runExList(ServiceMessage msg) throws InterruptedException, JSONException, LSException, IOException 
 	{
