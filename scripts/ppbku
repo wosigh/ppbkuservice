@@ -3,7 +3,7 @@
 # drew.phillibert@gmail.com
 # TNT Services, Inc.
 
-mount -o remount,rw / > /null
+mount -o remount,rw /
 
 if [ ! -f /opt/bin/tar ]; then
 	echo -e "\nAn error occured with GNU TAR. Palm Pre Backup cannot continue!"
@@ -14,7 +14,7 @@ if [ ! -d /media/internal/ppbackup ]; then
 	mkdir /media/internal/ppbackup > /null
 fi
 
-/opt/bin/tar -cvf /media/internal/ppbackup/ppbku_$1.tar.gz --files-from=/tmp/Include --exclude-from=/tmp/Exclude > /tmp/backup_log
+/opt/bin/tar -cvf /media/internal/ppbackup/ppbku_$1.tar.gz --files-from=/tmp/Include --exclude-from=/tmp/Exclude  > /tmp/backup_log
 
 if [ -f /media/internal/ppbackup/ppbku_$1.tar.gz ]; then
 	echo -e "\nThe Palm Pre Backup completed successfully!"

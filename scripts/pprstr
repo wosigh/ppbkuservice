@@ -4,9 +4,9 @@
 # TNT Services, Inc.
 
 mount -o remount,rw / > /null
-if [ -f /media/internal/ppbackup/ppbku_$1.tar.gz ]; then
+if [ -f $1 ]; then
 	cd /
-	/opt/bin/tar -xvf /media/internal/ppbackup/ppbku_$1.tar.gz  > /tmp/restore_log
+	/opt/bin/tar -xvf $1 > /tmp/restore_log
 	echo "SUCCESS: ppbku_$1.tar.gz, was successfuly restored."
 	exit 0
 fi
