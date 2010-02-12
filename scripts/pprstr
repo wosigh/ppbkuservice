@@ -6,7 +6,7 @@
 mount -o remount,rw / > /null
 if [ -f $1 ]; then
 	cd /
-	/opt/bin/tar -xvf $1 > /tmp/restore_log
+	tar -xvf $1 > /tmp/restore_log
 	echo "SUCCESS: ppbku_$1.tar.gz, was successfuly restored."
 	exit 0
 fi

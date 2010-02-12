@@ -5,16 +5,11 @@
 
 mount -o remount,rw /
 
-if [ ! -f /opt/bin/tar ]; then
-	echo -e "\nAn error occured with GNU TAR. Palm Pre Backup cannot continue!"
-	exit 1
-fi
-
 if [ ! -d /media/internal/ppbackup ]; then
 	mkdir /media/internal/ppbackup > /null
 fi
 
-/opt/bin/tar -cvf /media/internal/ppbackup/ppbku_$1.tar.gz --files-from=/tmp/Include --exclude-from=/tmp/Exclude  > /tmp/backup_log
+tar -cvf /media/internal/ppbackup/ppbku_$1.tar.gz --files-from=/tmp/Include --exclude-from=/tmp/Exclude  > /tmp/backup_log
 
 if [ -f /media/internal/ppbackup/ppbku_$1.tar.gz ]; then
 	echo -e "\nThe Palm Pre Backup completed successfully!"
